@@ -16,6 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".InputPIN"
+            android:label="@string/title_activity_input_pin"
+            android:parentActivityName=".HomeScreen">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.halfwit.cognitivepin.HomeScreen" />
+        </activity>
     </application>
 
 </manifest>

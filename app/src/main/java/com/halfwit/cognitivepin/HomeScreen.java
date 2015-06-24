@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
 
 import java.util.Random;
 
@@ -45,9 +46,20 @@ public class HomeScreen extends ActionBarActivity {
     }
 
     public void savePIN(View view){
-        Intent intent = new Intent(this, PINTest.class);
+        Intent intent = new Intent(this, InputPIN.class);
         EditText editText = (EditText) findViewById(R.id.PINtext);
         System.out.println(editText.getText());
+        Bundle bundle = new Bundle();
+        bundle.putString("EXTRA_PIN", editText.getText().toString());
+        RadioButton leftRadio = (RadioButton) findViewById(R.id.radioLeft);
+        if (leftRadio.isChecked())
+            bundle.putString("EXTRA_SELECTION", "left");
+        else
+            bundle.putString("EXTRA_SELECTION", "right");
+
+        intent.putExtras(bundle);
+
+        startActivity(intent);
     }
 
 }
