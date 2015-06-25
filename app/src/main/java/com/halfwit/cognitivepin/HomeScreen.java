@@ -10,18 +10,13 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
-import java.util.Random;
-
 
 public class HomeScreen extends ActionBarActivity {
 
-    private Random rand;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
-
-        rand = new Random();
     }
 
     @Override
@@ -46,14 +41,17 @@ public class HomeScreen extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // Saving the PIN code when Save PIN button is clicked
     public void savePIN(View view){
         Intent intent = new Intent(this, InputPIN.class);
         EditText editText = (EditText) findViewById(R.id.PINtext);
         Bundle bundle = new Bundle();
-        if (editText.length() == 4) {
+        RadioButton radioLeft = (RadioButton) findViewById(R.id.radioLeft);
+        RadioButton radioRight = (RadioButton) findViewById(R.id.radioRight);
+        if ((editText.length() == 4) && (radioLeft.isChecked() || radioRight.isChecked())) {
             bundle.putString("EXTRA_PIN", editText.getText().toString());
-            RadioButton leftRadio = (RadioButton) findViewById(R.id.radioLeft);
-            if (leftRadio.isChecked())
+
+            if (radioLeft.isChecked())
                 bundle.putString("EXTRA_SELECTION", "left");
             else
                 bundle.putString("EXTRA_SELECTION", "right");
@@ -61,8 +59,10 @@ public class HomeScreen extends ActionBarActivity {
             intent.putExtras(bundle);
 
             startActivity(intent);
-        } else {
+        } else if (editText.length() < 4) {
             Toast.makeText(getApplicationContext(), "PIN has to be 4 digits!", Toast.LENGTH_LONG).show();
+        } else if (!radioLeft.isChecked() || !radioRight.isChecked()) {
+            Toast.makeText(getApplicationContext(), "Select Left or Right!", Toast.LENGTH_LONG).show();
         }
     }
 

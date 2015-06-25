@@ -34,7 +34,6 @@
             android:layout_height="wrap_content"
             android:text="Left"
             android:id="@+id/radioLeft"
-            android:checked="true"
             android:layout_marginRight="30dp" />
 
         <RadioButton

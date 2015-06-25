@@ -22,12 +22,15 @@ public class InputPIN extends ActionBarActivity {
     String pin;
     String selection;
     int pass = 0;
+    private TextView pinDot;
+    private long startTime, endTime;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_input_pin);
+        pinDot = (TextView) findViewById(R.id.pinDot);
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         pin = extras.getString("EXTRA_PIN");
@@ -61,15 +64,19 @@ public class InputPIN extends ActionBarActivity {
     }
 
     public void btnLeft(final View view) {
+        if (pass == 0)
+            startTime = System.currentTimeMillis();
         userInput[pass] = -1;
+        pinDot.append("•");
         pass++;
-        show();
+        //show();
         if (pass < 4)
             randGenerator(pin, selection);
         else {
+            endTime = System.currentTimeMillis();
             if (Arrays.equals(expectedInput, userInput)) {
                 new AlertDialog.Builder(this).setTitle("Success")
-                        .setMessage("Correct PIN")
+                        .setMessage("Correct PIN\nTime taken: " + (double) (endTime - startTime) / 1000 + "s")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 startOver(view);
@@ -78,7 +85,7 @@ public class InputPIN extends ActionBarActivity {
                         .show();
             } else {
                 new AlertDialog.Builder(this).setTitle("Fail")
-                        .setMessage("Wrong PIN")
+                        .setMessage("Wrong PIN\nTime taken: " + (double) (endTime - startTime) / 1000 + "s")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 startOver(view);
@@ -91,15 +98,19 @@ public class InputPIN extends ActionBarActivity {
     }
 
     public void btnRight(final View view) {
+        if (pass == 0)
+            startTime = System.currentTimeMillis();
         userInput[pass] = 1;
+        pinDot.append("•");
         pass++;
-        show();
+        //show();
         if (pass < 4)
             randGenerator(pin, selection);
         else {
+            endTime = System.currentTimeMillis();
             if (Arrays.equals(expectedInput, userInput)) {
                 new AlertDialog.Builder(this).setTitle("Success")
-                        .setMessage("Correct PIN")
+                        .setMessage("Correct PIN\nTime taken: " + (double) (endTime - startTime) / 1000 + "s")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 startOver(view);
@@ -108,7 +119,7 @@ public class InputPIN extends ActionBarActivity {
                         .show();
             } else {
                 new AlertDialog.Builder(this).setTitle("Fail")
-                        .setMessage("Wrong PIN")
+                        .setMessage("Wrong PIN\nTime taken: " + (double) (endTime - startTime) / 1000 + "s")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 startOver(view);
@@ -121,8 +132,9 @@ public class InputPIN extends ActionBarActivity {
     }
 
     public void startOver(View view) {
-        show();
+        //show();
         pass = 0;
+        pinDot.setText("");
         expectedInput = new int[4];
         userInput = new int[4];
         randGenerator(pin, selection);
@@ -174,12 +186,12 @@ public class InputPIN extends ActionBarActivity {
 
     }
 
+    //for debugging purpose only
     public void show() {
         System.out.println(pass);
         System.out.print("Expected: ");
         for (int i = 0; i < expectedInput.length; i++)
             System.out.print(expectedInput[i] + " ");
-
         System.out.println();
         System.out.print("User: ");
         for (int i = 0; i < userInput.length; i++)
