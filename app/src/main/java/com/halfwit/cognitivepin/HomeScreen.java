@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import java.util.Random;
 
@@ -48,18 +49,21 @@ public class HomeScreen extends ActionBarActivity {
     public void savePIN(View view){
         Intent intent = new Intent(this, InputPIN.class);
         EditText editText = (EditText) findViewById(R.id.PINtext);
-        System.out.println(editText.getText());
         Bundle bundle = new Bundle();
-        bundle.putString("EXTRA_PIN", editText.getText().toString());
-        RadioButton leftRadio = (RadioButton) findViewById(R.id.radioLeft);
-        if (leftRadio.isChecked())
-            bundle.putString("EXTRA_SELECTION", "left");
-        else
-            bundle.putString("EXTRA_SELECTION", "right");
+        if (editText.length() == 4) {
+            bundle.putString("EXTRA_PIN", editText.getText().toString());
+            RadioButton leftRadio = (RadioButton) findViewById(R.id.radioLeft);
+            if (leftRadio.isChecked())
+                bundle.putString("EXTRA_SELECTION", "left");
+            else
+                bundle.putString("EXTRA_SELECTION", "right");
 
-        intent.putExtras(bundle);
+            intent.putExtras(bundle);
 
-        startActivity(intent);
+            startActivity(intent);
+        } else {
+            Toast.makeText(getApplicationContext(), "PIN has to be 4 digits!", Toast.LENGTH_LONG).show();
+        }
     }
 
 }

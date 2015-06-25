@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.Arrays;
 import java.util.Random;
 
 
@@ -59,18 +60,19 @@ public class InputPIN extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void btnLeft(View view) {
+    public void btnLeft(final View view) {
         userInput[pass] = -1;
         pass++;
         show();
         if (pass < 4)
             randGenerator(pin, selection);
         else {
-            if (expectedInput == userInput) {
+            if (Arrays.equals(expectedInput, userInput)) {
                 new AlertDialog.Builder(this).setTitle("Success")
                         .setMessage("Correct PIN")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                startOver(view);
                             }
                         })
                         .show();
@@ -79,26 +81,28 @@ public class InputPIN extends ActionBarActivity {
                         .setMessage("Wrong PIN")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                startOver(view);
                             }
                         })
                         .show();
             }
-            startOver(view);
+            //startOver(view);
         }
     }
 
-    public void btnRight(View view) {
+    public void btnRight(final View view) {
         userInput[pass] = 1;
         pass++;
         show();
         if (pass < 4)
             randGenerator(pin, selection);
         else {
-            if (expectedInput == userInput) {
+            if (Arrays.equals(expectedInput, userInput)) {
                 new AlertDialog.Builder(this).setTitle("Success")
                         .setMessage("Correct PIN")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                startOver(view);
                             }
                         })
                         .show();
@@ -107,11 +111,12 @@ public class InputPIN extends ActionBarActivity {
                         .setMessage("Wrong PIN")
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                startOver(view);
                             }
                         })
                         .show();
             }
-            startOver(view);
+            //startOver(view);
         }
     }
 
