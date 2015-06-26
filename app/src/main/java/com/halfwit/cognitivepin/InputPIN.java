@@ -1,12 +1,14 @@
 package com.halfwit.cognitivepin;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.view.GestureDetectorCompat;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -14,7 +16,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 
-public class InputPIN extends ActionBarActivity {
+public class InputPIN extends Activity {
 
     private Random rand;
     private int[] expectedInput = new int[4];
@@ -24,6 +26,9 @@ public class InputPIN extends ActionBarActivity {
     int pass = 0;
     private TextView pinDot;
     private long startTime, endTime;
+    private GestureDetectorCompat mDetector;
+    public float x1, x2;
+    static final int MIN_DISTANCE = 250;
 
 
     @Override
@@ -39,6 +44,26 @@ public class InputPIN extends ActionBarActivity {
         System.out.println(extras.getString("EXTRA_SELECTION"));
         rand = new Random();
         randGenerator(pin, selection);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                x1 = event.getX();
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = event.getX();
+                float deltaX = x2 - x1;
+                if (deltaX > MIN_DISTANCE) {
+                    rightSelection(findViewById(android.R.id.content));
+                } else if (deltaX < (-1 * MIN_DISTANCE)) {
+                    leftSelection(findViewById(android.R.id.content));
+                }
+                break;
+        }
+
+        return super.onTouchEvent(event);
     }
 
     @Override
@@ -63,7 +88,7 @@ public class InputPIN extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void btnLeft(final View view) {
+    public void leftSelection(final View view) {
         if (pass == 0)
             startTime = System.currentTimeMillis();
         userInput[pass] = -1;
@@ -97,7 +122,7 @@ public class InputPIN extends ActionBarActivity {
         }
     }
 
-    public void btnRight(final View view) {
+    public void rightSelection(final View view) {
         if (pass == 0)
             startTime = System.currentTimeMillis();
         userInput[pass] = 1;

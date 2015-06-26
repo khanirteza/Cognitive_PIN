@@ -68,31 +68,22 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="200dp"
-        android:layout_below="@+id/linearLayout"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp">
+        android:layout_above="@+id/btnStartOver"
+        android:layout_centerHorizontal="true">
 
-        <Button
+        <TextView
             android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:text="Left"
-            android:id="@+id/btnLeft"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Swipe left or right"
+            android:id="@+id/textView"
             android:layout_weight="1"
-            android:textStyle="bold"
+            android:textAlignment="center"
             android:textSize="30dp"
-            android:onClick="btnLeft" />
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:text="Right"
-            android:id="@+id/btnRight"
-            android:layout_weight="1"
-            android:textStyle="bold"
-            android:textSize="30dp"
-            android:onClick="btnRight" />
+            android:layout_gravity="center"
+            android:textColor="@android:color/darker_gray" />
     </LinearLayout>
 
     <Button
