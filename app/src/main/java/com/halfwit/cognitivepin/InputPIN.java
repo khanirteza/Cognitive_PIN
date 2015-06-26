@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.GestureDetectorCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -26,7 +25,6 @@ public class InputPIN extends Activity {
     int pass = 0;
     private TextView pinDot;
     private long startTime, endTime;
-    private GestureDetectorCompat mDetector;
     public float x1, x2;
     static final int MIN_DISTANCE = 250;
 
@@ -118,7 +116,7 @@ public class InputPIN extends Activity {
                         })
                         .show();
             }
-            //startOver(view);
+            startOver(view);
         }
     }
 
@@ -152,7 +150,7 @@ public class InputPIN extends Activity {
                         })
                         .show();
             }
-            //startOver(view);
+            startOver(view);
         }
     }
 
@@ -166,6 +164,8 @@ public class InputPIN extends Activity {
     }
 
     public void randGenerator(String pin, String selection) {
+        //Generate random number for each pass
+
         int num1, num2, num3, num4;
         char chDigit1, chDigit2, chDigit3, chDigit4;
         num1 = rand.nextInt(10);
@@ -184,15 +184,17 @@ public class InputPIN extends Activity {
         chDigit3 = String.valueOf(num3).charAt(0);
         chDigit4 = String.valueOf(num4).charAt(0);
 
+        setNumberPadColor(num1, num2, num3, num4);
 
-        TextView digit1 = (TextView) findViewById(R.id.digit1);
+
+        /*TextView digit1 = (TextView) findViewById(R.id.digit1);
         TextView digit2 = (TextView) findViewById(R.id.digit2);
         TextView digit3 = (TextView) findViewById(R.id.digit3);
         TextView digit4 = (TextView) findViewById(R.id.digit4);
         digit1.setText(String.valueOf(num1));
         digit2.setText(String.valueOf(num2));
         digit3.setText(String.valueOf(num3));
-        digit4.setText(String.valueOf(num4));
+        digit4.setText(String.valueOf(num4));*/
 
         if (selection.equals("left")) {
 
@@ -208,6 +210,32 @@ public class InputPIN extends Activity {
             else
                 expectedInput[pass] = -1;
         }
+
+    }
+
+    public void setNumberPadColor(int num1, int num2, int num3, int num4) {
+        //Set the number pad color based on passed argument
+        TextView[] textDigit = new TextView[10];
+
+        textDigit[0] = (TextView) findViewById(R.id.textDigit0);
+        textDigit[1] = (TextView) findViewById(R.id.textDigit1);
+        textDigit[2] = (TextView) findViewById(R.id.textDigit2);
+        textDigit[3] = (TextView) findViewById(R.id.textDigit3);
+        textDigit[4] = (TextView) findViewById(R.id.textDigit4);
+        textDigit[5] = (TextView) findViewById(R.id.textDigit5);
+        textDigit[6] = (TextView) findViewById(R.id.textDigit6);
+        textDigit[7] = (TextView) findViewById(R.id.textDigit7);
+        textDigit[8] = (TextView) findViewById(R.id.textDigit8);
+        textDigit[9] = (TextView) findViewById(R.id.textDigit9);
+
+        for (TextView textView : textDigit) {
+            textView.setTextColor(getResources().getColor(android.R.color.darker_gray));
+        }
+
+        textDigit[num1].setTextColor(getResources().getColor((android.R.color.black)));
+        textDigit[num2].setTextColor(getResources().getColor((android.R.color.black)));
+        textDigit[num3].setTextColor(getResources().getColor((android.R.color.black)));
+        textDigit[num4].setTextColor(getResources().getColor((android.R.color.black)));
 
     }
 
