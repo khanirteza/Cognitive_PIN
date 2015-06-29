@@ -54,4 +54,17 @@
         android:layout_marginTop="48dp"
         android:onClick="savePIN"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/direction_selection"
+        android:id="@+id/textView2"
+        android:layout_alignBottom="@+id/radioGroup"
+        android:layout_marginBottom="41dp"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp" />
+
 </RelativeLayout>
