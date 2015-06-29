@@ -27,6 +27,7 @@ public class InputPIN extends Activity {
     private long startTime, endTime;
     public float x1, x2;
     static final int MIN_DISTANCE = 250;
+    public int fail, success;
 
 
     @Override
@@ -42,6 +43,8 @@ public class InputPIN extends Activity {
         System.out.println(extras.getString("EXTRA_SELECTION"));
         rand = new Random();
         randGenerator(pin, selection);
+        fail = 0;
+        success = 0;
     }
 
     @Override
@@ -97,25 +100,7 @@ public class InputPIN extends Activity {
             randGenerator(pin, selection);
         else {
             endTime = System.currentTimeMillis();
-            if (Arrays.equals(expectedInput, userInput)) {
-                new AlertDialog.Builder(this).setTitle("Success")
-                        .setMessage("Correct PIN\nTime taken: " + (double) (endTime - startTime) / 1000 + "s")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                startOver(view);
-                            }
-                        })
-                        .show();
-            } else {
-                new AlertDialog.Builder(this).setTitle("Fail")
-                        .setMessage("Wrong PIN\nTime taken: " + (double) (endTime - startTime) / 1000 + "s")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                startOver(view);
-                            }
-                        })
-                        .show();
-            }
+            showResult(view);
             startOver(view);
         }
     }
@@ -131,26 +116,32 @@ public class InputPIN extends Activity {
             randGenerator(pin, selection);
         else {
             endTime = System.currentTimeMillis();
-            if (Arrays.equals(expectedInput, userInput)) {
-                new AlertDialog.Builder(this).setTitle("Success")
-                        .setMessage("Correct PIN\nTime taken: " + (double) (endTime - startTime) / 1000 + "s")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                startOver(view);
-                            }
-                        })
-                        .show();
-            } else {
-                new AlertDialog.Builder(this).setTitle("Fail")
-                        .setMessage("Wrong PIN\nTime taken: " + (double) (endTime - startTime) / 1000 + "s")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                startOver(view);
-                            }
-                        })
-                        .show();
-            }
+            showResult(view);
             startOver(view);
+        }
+    }
+
+    public void showResult(final View view) {
+        if (Arrays.equals(expectedInput, userInput)) {
+            new AlertDialog.Builder(this).setTitle("Success")
+                    .setMessage("Correct PIN\nTime taken: " + (double) (endTime - startTime) / 1000 + "s" +
+                            "\nSucceeded: " + ++success + "\nFailed: " + fail)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .show();
+        } else {
+            new AlertDialog.Builder(this).setTitle("Fail")
+                    .setMessage("Wrong PIN\nTime taken: " + (double) (endTime - startTime) / 1000 + "s" +
+                            "\nSucceeded: " + success + "\nFailed: " + ++fail)
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    })
+                    .show();
         }
     }
 
@@ -166,8 +157,8 @@ public class InputPIN extends Activity {
     public void randGenerator(String pin, String selection) {
         //Generate random number for each pass
 
-        int num1, num2, num3, num4;
-        char chDigit1, chDigit2, chDigit3, chDigit4;
+        int num1, num2, num3, num4, num5;
+        char chDigit1, chDigit2, chDigit3, chDigit4, chDigit5;
         num1 = rand.nextInt(10);
         num2 = rand.nextInt(10);
         while (num1 == num2)
@@ -178,14 +169,17 @@ public class InputPIN extends Activity {
         num4 = rand.nextInt(10);
         while ((num1 == num4) || (num2 == num4) || (num3 == num4))
             num4 = rand.nextInt(10);
+        num5 = rand.nextInt(10);
+        while ((num1 == num5) || (num2 == num5) || (num3 == num5) || (num4 == num5))
+            num5 = rand.nextInt(10);
 
         chDigit1 = String.valueOf(num1).charAt(0);
         chDigit2 = String.valueOf(num2).charAt(0);
         chDigit3 = String.valueOf(num3).charAt(0);
         chDigit4 = String.valueOf(num4).charAt(0);
+        chDigit5 = String.valueOf(num5).charAt(0);
 
-        setNumberPadColor(num1, num2, num3, num4);
-
+        setNumberPadColor(num1, num2, num3, num4, num5);
 
         /*TextView digit1 = (TextView) findViewById(R.id.digit1);
         TextView digit2 = (TextView) findViewById(R.id.digit2);
@@ -199,13 +193,15 @@ public class InputPIN extends Activity {
         if (selection.equals("left")) {
 
             if ((pin.charAt(pass) == chDigit1) || (pin.charAt(pass) == chDigit2) ||
-                    (pin.charAt(pass) == chDigit3) || (pin.charAt(pass) == chDigit4))
+                    (pin.charAt(pass) == chDigit3) || (pin.charAt(pass) == chDigit4) ||
+                    (pin.charAt(pass) == chDigit5))
                 expectedInput[pass] = -1;
             else
                 expectedInput[pass] = 1;
         } else {
             if ((pin.charAt(pass) == chDigit1) || (pin.charAt(pass) == chDigit2) ||
-                    (pin.charAt(pass) == chDigit3) || (pin.charAt(pass) == chDigit4))
+                    (pin.charAt(pass) == chDigit3) || (pin.charAt(pass) == chDigit4) ||
+                    (pin.charAt(pass) == chDigit5))
                 expectedInput[pass] = 1;
             else
                 expectedInput[pass] = -1;
@@ -213,7 +209,7 @@ public class InputPIN extends Activity {
 
     }
 
-    public void setNumberPadColor(int num1, int num2, int num3, int num4) {
+    public void setNumberPadColor(int num1, int num2, int num3, int num4, int num5) {
         //Set the number pad color based on passed argument
         TextView[] textDigit = new TextView[10];
 
@@ -232,10 +228,11 @@ public class InputPIN extends Activity {
             textView.setTextColor(getResources().getColor(android.R.color.darker_gray));
         }
 
-        textDigit[num1].setTextColor(getResources().getColor((android.R.color.black)));
-        textDigit[num2].setTextColor(getResources().getColor((android.R.color.black)));
-        textDigit[num3].setTextColor(getResources().getColor((android.R.color.black)));
-        textDigit[num4].setTextColor(getResources().getColor((android.R.color.black)));
+        textDigit[num1].setTextColor(getResources().getColor(android.R.color.black));
+        textDigit[num2].setTextColor(getResources().getColor(android.R.color.black));
+        textDigit[num3].setTextColor(getResources().getColor(android.R.color.black));
+        textDigit[num4].setTextColor(getResources().getColor(android.R.color.black));
+        textDigit[num5].setTextColor(getResources().getColor(android.R.color.black));
 
     }
 
