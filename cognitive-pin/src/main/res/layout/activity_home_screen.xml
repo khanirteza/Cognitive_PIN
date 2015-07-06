@@ -27,18 +27,9 @@
         <Button
             android:layout_width="136dp"
             android:layout_height="wrap_content"
-            android:text="Remove User"
-            android:id="@+id/home_btn_remove_user"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="20dp"
-            android:onClick="removeUser"/>
-
-        <Button
-            android:layout_width="136dp"
-            android:layout_height="wrap_content"
-            android:text="Test"
+            android:text="Login"
             android:id="@+id/home_btn_test"
             android:layout_gravity="center_horizontal"
-            android:onClick="testSystem"/>
+            android:onClick="showUserList"/>
     </LinearLayout>
 </RelativeLayout>

@@ -10,6 +10,7 @@
     <string name="title_activity_input_pin">Input PIN</string>
     <string name="direction_selection">Choose the swipe direction that will be used as Yes. The opposite direction will be used as No.</string>
     <string name="swipe_direction">Swipe left or right</string>
+    <string name="type_name">Type your name here</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="title_activity_save_pin">Save PIN</string>
@@ -17,4 +18,5 @@
     <string name="title_activity_home_screen">HomeScreen</string>
     <string name="title_activity_face_training">Face Training</string>
     <string name="title_activity_face_detection">Face Detection</string>
+    <string name="title_activity_user_list">User List</string>
 </resources>

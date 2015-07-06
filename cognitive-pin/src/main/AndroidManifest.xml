@@ -48,6 +48,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.halfwit.cognitivepin.FaceDetection" />
         </activity>
+        <activity
+            android:name=".UserList"
+            android:label="@string/title_activity_user_list"
+            android:parentActivityName=".HomeScreen" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.halfwit.cognitivepin.HomeScreen" />
+        </activity>
     </application>
 
 </manifest>

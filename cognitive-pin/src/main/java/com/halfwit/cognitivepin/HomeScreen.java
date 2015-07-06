@@ -43,4 +43,10 @@ public class HomeScreen extends ActionBarActivity {
         Intent intent = new Intent(this, FaceTraining.class);
         startActivity(intent);
     }
+
+    // start testing the system
+    public void showUserList(View view){
+        Intent intent = new Intent(this, UserList.class);
+        startActivity(intent);
+    }
 }

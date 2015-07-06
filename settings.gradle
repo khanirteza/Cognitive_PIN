@@ -1,1 +1,2 @@
 include ':cognitive-pin'
+include ':libraries:opencv'
