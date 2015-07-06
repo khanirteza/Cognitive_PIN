@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CognitivePIN.iml" filepath="$PROJECT_DIR$/CognitivePIN.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/cognitive-pin.iml" filepath="$PROJECT_DIR$/app/cognitive-pin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cognitivie-pin.iml" filepath="$PROJECT_DIR$/cognitivie-pin.iml" />
     </modules>
   </component>
 </project>
