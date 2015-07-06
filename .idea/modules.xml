@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/cognitive-pin.iml" filepath="$PROJECT_DIR$/app/cognitive-pin.iml" />
       <module fileurl="file://$PROJECT_DIR$/cognitivie-pin.iml" filepath="$PROJECT_DIR$/cognitivie-pin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cognitivie-pin.iml" filepath="$PROJECT_DIR$/cognitivie-pin.iml" />
     </modules>
   </component>
 </project>
