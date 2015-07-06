@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".SavePIN"
+            android:name=".HomeScreen"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,12 +17,36 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".InputPIN"
-            android:label="@string/title_activity_input_pin"
-            android:parentActivityName=".SavePIN">
+            android:name=".FaceTraining"
+            android:label="@string/title_activity_face_training"
+            android:parentActivityName=".HomeScreen" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".SavePIN" />
+                android:value="com.halfwit.cognitivepin.HomeScreen" />
+        </activity>
+        <activity
+            android:name=".SavePIN"
+            android:label="@string/title_activity_home_screen" >
+            android:parentActivityName=".FaceTraining" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.halfwit.cognitivepin.FaceTraining" />
+        </activity>
+        <activity
+            android:name=".FaceDetection"
+            android:label="@string/title_activity_face_detection"
+            android:parentActivityName=".HomeScreen" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.halfwit.cognitivepin.HomeScreen" />
+        </activity>
+        <activity
+            android:name=".InputPIN"
+            android:label="@string/title_activity_input_pin"
+            android:parentActivityName=".FaceDetection" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.halfwit.cognitivepin.FaceDetection" />
         </activity>
     </application>
 
