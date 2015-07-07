@@ -24,7 +24,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import org.opencv.android.BaseLoaderCallback;
-import org.opencv.android.CameraBridgeViewBase;
+import org.opencv.android.CameraBridgeViewBase.CvCameraViewFrame;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
@@ -68,6 +68,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
     ImageView ivGreen, ivYellow, ivRed;
     ImageButton imCamera;
     TextView textState;
+    com.googlecode.javacv.cpp.opencv_contrib.FaceRecognizer faceRecognizer;
     ArrayList<Mat> alimgs = new ArrayList<Mat>();
     int[] labels = new int[(int) MAXIMG];
     int countImages = 0;
@@ -169,11 +170,9 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "called onCreate");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_face_training);
-
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setContentView(R.layout.activity_face_training);
@@ -379,7 +378,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
         mRgba.release();
     }
 
-    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+    public Mat onCameraFrame(CvCameraViewFrame inputFrame) {
 
         mRgba = inputFrame.rgba();
         mGray = inputFrame.gray();
