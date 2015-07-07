@@ -49,4 +49,9 @@ public class HomeScreen extends ActionBarActivity {
         Intent intent = new Intent(this, UserList.class);
         startActivity(intent);
     }
+
+    public void showFd(View view){
+        Intent intent = new Intent(this, FdActivity.class);
+        startActivity(intent);
+    }
 }

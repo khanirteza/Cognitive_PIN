@@ -45,7 +45,6 @@ import java.util.ArrayList;
 
 
 public class FaceTraining extends Activity implements CvCameraViewListener2 {
-
     public static final int JAVA_DETECTOR = 0;
     public static final int NATIVE_DETECTOR = 1;
     public static final int TRAINING = 0;
@@ -98,6 +97,8 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
     private Tutorial3View mOpenCvCameraView;
     private int mChooseCamera = backCam;
     private ImageView Iv;
+
+    //static { if (!OpenCVLoader.initDebug()) {  }}
 
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -180,7 +181,8 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
         mOpenCvCameraView = (Tutorial3View) findViewById(R.id.face_training_java_surface_view);
 
         mOpenCvCameraView.setCvCameraViewListener(this);
-        mOpenCvCameraView.setCamFront();
+        //mOpenCvCameraView.setCamFront();
+        mOpenCvCameraView.setCamBack();
 
 
         mPath = getFilesDir() + "/facerecogOCV/";
@@ -359,7 +361,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
     @Override
     public void onResume() {
         super.onResume();
-        OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_10, this, mLoaderCallback);
+        OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
     }
 
     public void onDestroy() {
