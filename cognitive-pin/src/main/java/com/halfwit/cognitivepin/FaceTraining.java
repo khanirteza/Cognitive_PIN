@@ -32,9 +32,11 @@ import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
+import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 
 import java.io.File;
@@ -96,7 +98,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
     private int mAbsoluteFaceSize = 0;
     private int mLikely = 999;
     private Tutorial3View mOpenCvCameraView;
-    private int mChooseCamera = backCam;
+    private int mChooseCamera = frontCam;
     private ImageView Iv;
 
     //static { if (!OpenCVLoader.initDebug()) {  }}
@@ -181,7 +183,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
 
         mOpenCvCameraView.setCvCameraViewListener(this);
         //mOpenCvCameraView.setCamFront();
-        mOpenCvCameraView.setCamBack();
+        //mOpenCvCameraView.setCamBack();
 
 
         mPath = getFilesDir() + "/facerecogOCV/";
@@ -383,6 +385,17 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
         mRgba = inputFrame.rgba();
         mGray = inputFrame.gray();
 
+
+        /*
+        Mat mRgbaT = mRgba.t();
+        Core.flip(mRgba.t(), mRgbaT, -1);
+        Imgproc.resize(mRgbaT, mRgbaT, new Size(640, 480), 1920, 1080, Imgproc.INTER_AREA);
+        //Log.e("size", mRgba.size().toString());
+        mRgba = mRgbaT;
+        */
+
+
+
         if (mAbsoluteFaceSize == 0) {
             int height = mGray.rows();
             if (Math.round(height * mRelativeFaceSize) > 0) {
@@ -391,7 +404,20 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
             //  mNativeDetector.setMinFaceSize(mAbsoluteFaceSize);
         }
 
+
+        /*
+        Mat temp = mGray.clone();
+
+        Core.transpose(mGray, temp);
+        Core.flip(temp, temp, -1);
+        */
+
         MatOfRect faces = new MatOfRect();
+
+
+        //Core.flip(mRgbaT.t(), mRgbaT, -1);
+        //Core.flip(mGray.t(), mGray, -1);
+
 
         if (mDetectorType == JAVA_DETECTOR) {
             if (mJavaDetector != null)
@@ -449,8 +475,23 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
             mHandler.sendMessage(msg);
 
         }*/
+
         for (int i = 0; i < facesArray.length; i++)
             Core.rectangle(mRgba, facesArray[i].tl(), facesArray[i].br(), FACE_RECT_COLOR, 3);
+
+
+        /*
+        Point tl = new Point();
+        Point br = new Point();
+        for (int i = 0, f=facesArray.length; i<f; i++){
+            tl.x = facesArray[i].tl().y;
+            tl.y = facesArray[i].tl().x;
+            br.x = facesArray[i].br().y;
+            br.y = facesArray[i].br().x;
+            Core.rectangle(mRgba, tl, br, FACE_RECT_COLOR, 3);
+
+        }
+        */
 
         return mRgba;
     }
@@ -458,8 +499,17 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_face_training, menu);
+        Log.i(TAG, "called onCreateOptionsMenu");
+        if (mOpenCvCameraView.numberCameras() > 1) {
+            nBackCam = menu.add(getResources().getString(R.string.SFrontCamera));
+            mFrontCam = menu.add(getResources().getString(R.string.SBackCamera));
+//        mEigen = menu.add("EigenFaces");
+//        mLBPH.setChecked(true);
+        } else {
+            imCamera.setVisibility(View.INVISIBLE);
+
+        }
+        //mOpenCvCameraView.setAutofocus();
         return true;
     }
 
@@ -468,14 +518,37 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        Log.i(TAG, "called onOptionsItemSelected; selected item: " + item);
+//        if (item == mItemFace50)
+//            setMinFaceSize(0.5f);
+//        else if (item == mItemFace40)
+//            setMinFaceSize(0.4f);
+//        else if (item == mItemFace30)
+//            setMinFaceSize(0.3f);
+//        else if (item == mItemFace20)
+//            setMinFaceSize(0.2f);
+//        else if (item == mItemType) {
+//            mDetectorType = (mDetectorType + 1) % mDetectorName.length;
+//            item.setTitle(mDetectorName[mDetectorType]);
+//            setDetectorType(mDetectorType);
+//
+//        }
+        nBackCam.setChecked(false);
+        mFrontCam.setChecked(false);
+        //  mEigen.setChecked(false);
+        if (item == nBackCam) {
+            mOpenCvCameraView.setCamFront();
+            mChooseCamera = frontCam;
+        }
+        //fr.changeRecognizer(0);
+        else if (item == mFrontCam) {
+            mChooseCamera = backCam;
+            mOpenCvCameraView.setCamBack();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
         }
 
-        return super.onOptionsItemSelected(item);
+        item.setChecked(true);
+        return true;
     }
 
 }

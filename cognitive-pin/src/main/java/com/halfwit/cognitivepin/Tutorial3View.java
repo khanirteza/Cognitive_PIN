@@ -9,12 +9,10 @@ import android.hardware.Camera.Size;
 import android.util.AttributeSet;
 import android.util.Log;
 
-import org.opencv.android.JavaCameraView;
-
 import java.io.FileOutputStream;
 import java.util.List;
 
-public class Tutorial3View extends JavaCameraView {
+public class Tutorial3View extends PortraitCameraView {
 
     private static final String TAG = "Sample::Tutorial3View";
 
