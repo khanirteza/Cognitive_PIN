@@ -1,2 +1,2 @@
-include ':cognitive-pin'
+include ':cognitive-pin', ':javacv', ':javacpp'
 include ':libraries:opencv'
