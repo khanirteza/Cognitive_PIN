@@ -6,9 +6,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.Toast;
 
 
 public class SetPIN extends ActionBarActivity {
@@ -43,6 +40,7 @@ public class SetPIN extends ActionBarActivity {
 
     // Saving the PIN code when Save PIN button is clicked
     public void savePIN(View view){
+        /*
         Intent intent = new Intent(this, InputPIN.class);
         EditText editText = (EditText) findViewById(R.id.PINtext);
         Bundle bundle = new Bundle();
@@ -64,6 +62,9 @@ public class SetPIN extends ActionBarActivity {
         } else if (!radioLeft.isChecked() || !radioRight.isChecked()) {
             Toast.makeText(getApplicationContext(), "Select Left or Right!", Toast.LENGTH_LONG).show();
         }
+        */
+
+        startActivity (new Intent(this, HomeScreen.class));
     }
 
 }

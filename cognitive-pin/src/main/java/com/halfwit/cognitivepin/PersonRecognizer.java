@@ -29,7 +29,7 @@ public class PersonRecognizer {
     String mPath;
     int count = 0;
     labels labelsFile;
-    ;
+
     private int mProb = 999;
 
 

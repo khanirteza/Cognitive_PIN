@@ -10,10 +10,13 @@ import android.view.View;
 
 public class HomeScreen extends ActionBarActivity {
 
+    Bundle bundle = new Bundle();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+        bundle.putString("PATH", getFilesDir() + "/userList/");
     }
 
     @Override
@@ -41,12 +44,14 @@ public class HomeScreen extends ActionBarActivity {
     // Start the FaceTraining class
     public void newUser(View view){
         Intent intent = new Intent(this, FaceTraining.class);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
     // start testing the system
     public void showUserList(View view){
         Intent intent = new Intent(this, UserList.class);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 

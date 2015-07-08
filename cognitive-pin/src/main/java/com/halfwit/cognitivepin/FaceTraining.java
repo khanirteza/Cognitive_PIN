@@ -80,7 +80,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
 //    private MenuItem               mItemType;
 //
     private Button btnCapture;
-    private Button btnSave;
+    private Button btnNext;
 
     private MenuItem nBackCam;
     private MenuItem mFrontCam;
@@ -172,6 +172,8 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
     public void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "called onCreate");
         super.onCreate(savedInstanceState);
+        Bundle extras = getIntent().getExtras();
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setContentView(R.layout.activity_face_training);
@@ -183,7 +185,8 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
         //mOpenCvCameraView.setCamBack();
 
 
-        mPath = getFilesDir() + "/facerecogOCV/";
+        //mPath = getFilesDir() + "/userList/";
+        mPath = extras.getString("PATH");
 
         labelsFile = new labels(mPath);
 
@@ -197,17 +200,19 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
                     Canvas canvas = new Canvas();
                     canvas.setBitmap(mBitmap);
                     ivPerson.setImageBitmap(mBitmap);
-                    btnSave.setVisibility(View.VISIBLE);
+                    btnNext.setVisibility(View.VISIBLE);
                 }
             }
         };
 
         etName = (EditText) findViewById(R.id.face_training_et_name);
         btnCapture = (Button) findViewById(R.id.face_training_btn_capture);
-        btnSave = (Button) findViewById(R.id.face_training_btn_save);
+        btnNext = (Button) findViewById(R.id.face_training_btn_save);
 
         btnCapture.setVisibility(View.INVISIBLE);
-        btnSave.setVisibility(View.INVISIBLE);
+        btnNext.setVisibility(View.INVISIBLE);
+
+
         //buttonCatalog = (Button) findViewById(R.id.buttonCat);
         //toggleButtonGrabar = (ToggleButton) findViewById(R.id.toggleButtonGrabar);
         //buttonSearch = (ToggleButton) findViewById(R.id.buttonBuscar);
@@ -243,8 +248,10 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (etName.getText().toString().length() > 0)
                     btnCapture.setVisibility(View.VISIBLE);
-                else
+                else {
                     btnCapture.setVisibility(View.INVISIBLE);
+                    btnNext.setVisibility(View.INVISIBLE);
+                }
 
                 return false;
             }
@@ -495,7 +502,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.i(TAG, "called onCreateOptionsMenu");
+        /*Log.i(TAG, "called onCreateOptionsMenu");
         if (mOpenCvCameraView.numberCameras() > 1) {
             nBackCam = menu.add(getResources().getString(R.string.SFrontCamera));
             mFrontCam = menu.add(getResources().getString(R.string.SBackCamera));
@@ -505,13 +512,13 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
             imCamera.setVisibility(View.INVISIBLE);
 
         }
-        //mOpenCvCameraView.setAutofocus();
+        //mOpenCvCameraView.setAutofocus();*/
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
+        /*// Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         Log.i(TAG, "called onOptionsItemSelected; selected item: " + item);
@@ -543,13 +550,13 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
 
         }
 
-        item.setChecked(true);
+        item.setChecked(true);*/
         return true;
     }
 
 
     public void loadSetPIN(View view){
-        //fr.train();
+        fr.train();
         Intent intent = new Intent(this, SetPIN.class);
         startActivity(intent);
     }
