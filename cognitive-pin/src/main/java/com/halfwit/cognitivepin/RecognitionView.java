@@ -12,11 +12,11 @@ import android.util.Log;
 import java.io.FileOutputStream;
 import java.util.List;
 
-public class Tutorial3View extends PortraitCameraView {
+public class RecognitionView extends PortraitCameraView {
 
     private static final String TAG = "Sample::Tutorial3View";
 
-    public Tutorial3View(Context context, AttributeSet attrs) {
+    public RecognitionView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
     }

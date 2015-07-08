@@ -11,12 +11,12 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 
-public class SavePIN extends ActionBarActivity {
+public class SetPIN extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_save_pin);
+        setContentView(R.layout.activity_set_pin);
     }
 
     @Override

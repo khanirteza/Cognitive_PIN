@@ -23,7 +23,7 @@
             android:layout_marginBottom="10dp" >
 
 
-            <com.halfwit.cognitivepin.Tutorial3View
+            <com.halfwit.cognitivepin.RecognitionView
                 android:id="@+id/face_training_java_surface_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -64,14 +64,16 @@
                     android:layout_height="wrap_content"
                     android:text="Capture"
                     android:id="@+id/face_training_btn_capture"
-                    android:layout_gravity="end" />
+                    android:layout_gravity="end"
+                    android:layout_marginBottom="10dp"/>
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Save"
+                    android:text="Next"
                     android:id="@+id/face_training_btn_save"
-                    android:layout_gravity="end" />
+                    android:layout_gravity="end"
+                    android:onClick="loadSetPIN"/>
             </LinearLayout>
         </LinearLayout>
 

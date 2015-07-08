@@ -41,8 +41,8 @@
                 android:value="com.halfwit.cognitivepin.HomeScreen" />
         </activity>
         <activity
-            android:name=".SavePIN"
-            android:label="@string/title_activity_home_screen" >
+            android:name=".SetPIN"
+            android:label="@string/title_activity_set_pin" >
             android:parentActivityName=".FaceTraining" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -2,7 +2,6 @@ package com.halfwit.cognitivepin;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Bundle;
@@ -95,7 +94,7 @@ public class FdActivity extends Activity implements CvCameraViewListener2 {
     private float mRelativeFaceSize = 0.2f;
     private int mAbsoluteFaceSize = 0;
     private int mLikely = 999;
-    private Tutorial3View mOpenCvCameraView;
+    private RecognitionView mOpenCvCameraView;
     private int mChooseCamera = backCam;
     private ImageView Iv;
 
@@ -180,7 +179,7 @@ public class FdActivity extends Activity implements CvCameraViewListener2 {
 
         setContentView(R.layout.face_detect_surface_view);
 
-        mOpenCvCameraView = (Tutorial3View) findViewById(R.id.tutorial3_activity_java_surface_view);
+        mOpenCvCameraView = (RecognitionView) findViewById(R.id.tutorial3_activity_java_surface_view);
 
         mOpenCvCameraView.setCvCameraViewListener(this);
 

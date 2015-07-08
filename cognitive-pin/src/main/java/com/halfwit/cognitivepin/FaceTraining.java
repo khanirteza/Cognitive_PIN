@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -32,11 +31,9 @@ import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
-import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 
 import java.io.File;
@@ -97,9 +94,9 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
     private float mRelativeFaceSize = 0.2f;
     private int mAbsoluteFaceSize = 0;
     private int mLikely = 999;
-    private Tutorial3View mOpenCvCameraView;
+    private RecognitionView mOpenCvCameraView;
     private int mChooseCamera = frontCam;
-    private ImageView Iv;
+    private ImageView ivPerson;
 
     //static { if (!OpenCVLoader.initDebug()) {  }}
 
@@ -162,7 +159,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
         }
     };
 
-    public FaceTraining(){
+    public FaceTraining() {
         mDetectorName = new String[2];
         mDetectorName[JAVA_DETECTOR] = "Java";
         mDetectorName[NATIVE_DETECTOR] = "Native (tracking)";
@@ -179,7 +176,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
 
         setContentView(R.layout.activity_face_training);
 
-        mOpenCvCameraView = (Tutorial3View) findViewById(R.id.face_training_java_surface_view);
+        mOpenCvCameraView = (RecognitionView) findViewById(R.id.face_training_java_surface_view);
 
         mOpenCvCameraView.setCvCameraViewListener(this);
         //mOpenCvCameraView.setCamFront();
@@ -190,7 +187,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
 
         labelsFile = new labels(mPath);
 
-        Iv = (ImageView) findViewById(R.id.face_training_iv_person);
+        ivPerson = (ImageView) findViewById(R.id.face_training_iv_person);
 
 
         mHandler = new Handler() {
@@ -199,7 +196,8 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
                 if (msg.obj == "IMG") {
                     Canvas canvas = new Canvas();
                     canvas.setBitmap(mBitmap);
-                    Iv.setImageBitmap(mBitmap);
+                    ivPerson.setImageBitmap(mBitmap);
+                    btnSave.setVisibility(View.VISIBLE);
                 }
             }
         };
@@ -207,6 +205,9 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
         etName = (EditText) findViewById(R.id.face_training_et_name);
         btnCapture = (Button) findViewById(R.id.face_training_btn_capture);
         btnSave = (Button) findViewById(R.id.face_training_btn_save);
+
+        btnCapture.setVisibility(View.INVISIBLE);
+        btnSave.setVisibility(View.INVISIBLE);
         //buttonCatalog = (Button) findViewById(R.id.buttonCat);
         //toggleButtonGrabar = (ToggleButton) findViewById(R.id.toggleButtonGrabar);
         //buttonSearch = (ToggleButton) findViewById(R.id.buttonBuscar);
@@ -246,6 +247,16 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
                     btnCapture.setVisibility(View.INVISIBLE);
 
                 return false;
+            }
+        });
+
+        btnCapture.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (faceState == TRAINING) {
+                    countImages = 0;
+                    faceState = IDLE;
+                }
+                faceState = TRAINING;
             }
         });
 
@@ -395,7 +406,6 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
         */
 
 
-
         if (mAbsoluteFaceSize == 0) {
             int height = mGray.rows();
             if (Math.round(height * mRelativeFaceSize) > 0) {
@@ -432,7 +442,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
 
         Rect[] facesArray = faces.toArray();
 
-        if ((facesArray.length == 1) /*&& (faceState == TRAINING)*/ && (countImages < MAXIMG) && (!etName.getText().toString().isEmpty())) {
+        if ((facesArray.length == 1) && (faceState == TRAINING) && (countImages < MAXIMG) && (!etName.getText().toString().isEmpty())) {
 
 
             Mat m = new Mat();
@@ -478,20 +488,6 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
 
         for (int i = 0; i < facesArray.length; i++)
             Core.rectangle(mRgba, facesArray[i].tl(), facesArray[i].br(), FACE_RECT_COLOR, 3);
-
-
-        /*
-        Point tl = new Point();
-        Point br = new Point();
-        for (int i = 0, f=facesArray.length; i<f; i++){
-            tl.x = facesArray[i].tl().y;
-            tl.y = facesArray[i].tl().x;
-            br.x = facesArray[i].br().y;
-            br.y = facesArray[i].br().x;
-            Core.rectangle(mRgba, tl, br, FACE_RECT_COLOR, 3);
-
-        }
-        */
 
         return mRgba;
     }
@@ -549,6 +545,13 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
 
         item.setChecked(true);
         return true;
+    }
+
+
+    public void loadSetPIN(View view){
+        //fr.train();
+        Intent intent = new Intent(this, SetPIN.class);
+        startActivity(intent);
     }
 
 }
