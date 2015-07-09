@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -54,6 +55,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
     private static final Scalar FACE_RECT_COLOR = new Scalar(0, 255, 0, 255);
     private static final int frontCam = 1;
     private static final int backCam = 2;
+    private static final int PIN_LEN = 3;
     //    private int countTrain=0;
     String mPath = "";
     EditText etName;
@@ -80,7 +82,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
 //    private MenuItem               mItemType;
 //
     private Button btnCapture;
-    private Button btnNext;
+    private Button btnSave;
 
     private MenuItem nBackCam;
     private MenuItem mFrontCam;
@@ -97,6 +99,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
     private RecognitionView mOpenCvCameraView;
     private int mChooseCamera = frontCam;
     private ImageView ivPerson;
+    private boolean capturedFlag = false;
 
     //static { if (!OpenCVLoader.initDebug()) {  }}
 
@@ -114,7 +117,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
 
                     fr = new PersonRecognizer(mPath);
                     String s = getResources().getString(R.string.Straining);
-                    Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
                     fr.load();
 
                     try {
@@ -200,17 +203,33 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
                     Canvas canvas = new Canvas();
                     canvas.setBitmap(mBitmap);
                     ivPerson.setImageBitmap(mBitmap);
-                    btnNext.setVisibility(View.VISIBLE);
+                    capturedFlag = true;
                 }
+                /*else {
+                    textresult.setText(msg.obj.toString());
+                    //ivGreen.setVisibility(View.INVISIBLE);
+                    //ivYellow.setVisibility(View.INVISIBLE);
+                    //ivRed.setVisibility(View.INVISIBLE);
+
+                    *//*if (mLikely < 0) ;
+                    else if (mLikely < 50)
+                        ivGreen.setVisibility(View.VISIBLE);
+                    else if (mLikely < 80)
+                        ivYellow.setVisibility(View.VISIBLE);
+                    else
+                        ivRed.setVisibility(View.VISIBLE);*//*
+                }*/
             }
         };
 
         etName = (EditText) findViewById(R.id.face_training_et_name);
         btnCapture = (Button) findViewById(R.id.face_training_btn_capture);
-        btnNext = (Button) findViewById(R.id.face_training_btn_save);
+        btnSave = (Button) findViewById(R.id.face_training_btn_save);
 
-        btnCapture.setVisibility(View.INVISIBLE);
-        btnNext.setVisibility(View.INVISIBLE);
+        //btnCapture.setVisibility(View.INVISIBLE);
+        //btnSave.setVisibility(View.INVISIBLE);
+        btnCapture.setEnabled(false);
+
 
 
         //buttonCatalog = (Button) findViewById(R.id.buttonCat);
@@ -247,10 +266,9 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
         etName.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (etName.getText().toString().length() > 0)
-                    btnCapture.setVisibility(View.VISIBLE);
+                    btnCapture.setEnabled(true);
                 else {
-                    btnCapture.setVisibility(View.INVISIBLE);
-                    btnNext.setVisibility(View.INVISIBLE);
+                    btnCapture.setEnabled(false);
                 }
 
                 return false;
@@ -559,6 +577,42 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
         fr.train();
         Intent intent = new Intent(this, SetPIN.class);
         startActivity(intent);
+    }
+
+    public void savePIN(View view){
+        Intent intent = new Intent(this, HomeScreen.class);
+        EditText pinText = (EditText) findViewById(R.id.face_training_et_pin);
+        EditText userName = (EditText) findViewById(R.id.face_training_et_name);
+        Bundle bundle = new Bundle();
+        RadioButton radioLeft = (RadioButton) findViewById(R.id.face_training_rd_left);
+        RadioButton radioRight = (RadioButton) findViewById(R.id.face_training_rd_right);
+        if ((userName.length() > 0) && (pinText.length() >= PIN_LEN) && (radioLeft.isChecked() || radioRight.isChecked())) {
+            bundle.putString("EXTRA_PIN", pinText.getText().toString());
+
+            if (radioLeft.isChecked())
+                bundle.putString("EXTRA_SELECTION", "left");
+            else
+                bundle.putString("EXTRA_SELECTION", "right");
+
+            intent.putExtras(bundle);
+
+            startActivity(intent);
+        }
+        else if (userName.length() == 0){
+            Toast.makeText(getApplicationContext(), "Please, enter the user name!", Toast.LENGTH_SHORT).show();
+        }
+        else if (!capturedFlag){
+            Toast.makeText(getApplicationContext(), "Please, capture your photo!", Toast.LENGTH_SHORT).show();
+        }
+        else if (pinText.length() < PIN_LEN) {
+            Toast.makeText(getApplicationContext(), "PIN has to be minimum 3 digits!", Toast.LENGTH_SHORT).show();
+        }
+        else if (!radioLeft.isChecked() || !radioRight.isChecked()) {
+            Toast.makeText(getApplicationContext(), "Select Left or Right!", Toast.LENGTH_SHORT).show();
+        }
+
+
+        //startActivity (new Intent(this, HomeScreen.class));
     }
 
 }

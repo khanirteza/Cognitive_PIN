@@ -37,6 +37,6 @@
             android:text="Login"
             android:id="@+id/home_btn_fd"
             android:layout_gravity="center_horizontal"
-            android:onClick="showFd"/>
+            android:onClick="showDetect"/>
     </LinearLayout>
 </RelativeLayout>

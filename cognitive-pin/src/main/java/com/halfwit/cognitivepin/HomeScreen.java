@@ -59,4 +59,8 @@ public class HomeScreen extends ActionBarActivity {
         Intent intent = new Intent(this, FdActivity.class);
         startActivity(intent);
     }
+
+    public void showDetect(View view){
+        startActivity(new Intent(this, FaceDetection.class).putExtras(bundle));
+    }
 }
