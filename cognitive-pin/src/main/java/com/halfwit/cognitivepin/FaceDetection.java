@@ -2,6 +2,7 @@ package com.halfwit.cognitivepin;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Bundle;
@@ -95,6 +96,9 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
     private int mChooseCamera = frontCam;
     private ImageView ivPerson;
     private boolean capturedFlag = false;
+    private int confidence = 3;
+    private String userName;
+    private long startTime;
 
     //static { if (!OpenCVLoader.initDebug()) {  }}
 
@@ -169,7 +173,7 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "called onCreate");
         super.onCreate(savedInstanceState);
-        Bundle extras = getIntent().getExtras();
+        //Bundle extras = getIntent().getExtras();
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -181,14 +185,19 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
         //mOpenCvCameraView.setCamFront();
         //mOpenCvCameraView.setCamBack();
 
-
+        userName = getIntent().getStringExtra("name");
+        startTime = System.currentTimeMillis();
+        confidence = 3;
         //mPath = getFilesDir() + "/userList/";
-        mPath = extras.getString("PATH");
+        //mPath = extras.getString("PATH");
+        mPath = getFilesDir() + getString(R.string.user_image_file);
 
         labelsFile = new labels(mPath);
 
         ivPerson = (ImageView) findViewById(R.id.face_detection_iv_person);
         textresult = (TextView) findViewById(R.id.face_detection_tv_name);
+
+        //final Intent intent = new Intent(this, InputPIN.class);
 
 
         mHandler = new Handler() {
@@ -198,10 +207,11 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
                     Canvas canvas = new Canvas();
                     canvas.setBitmap(mBitmap);
                     ivPerson.setImageBitmap(mBitmap);
-                    capturedFlag = true;
+                    //capturedFlag = true;
                 }
                 else {
                     textresult.setText(msg.obj.toString());
+                    String tempName = msg.obj.toString();
                     //ivGreen.setVisibility(View.INVISIBLE);
                     //ivYellow.setVisibility(View.INVISIBLE);
                     //ivRed.setVisibility(View.INVISIBLE);
@@ -214,9 +224,12 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
                     else
                         ivRed.setVisibility(View.VISIBLE);*//*
                         */
+
                 }
             }
         };
+
+
 
         //etName = (EditText) findViewById(R.id.face_training_et_name);
         //btnCapture = (Button) findViewById(R.id.face_training_btn_capture);
@@ -364,10 +377,10 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
             }
         });*/
 
-        boolean success = (new File(mPath)).mkdirs();
+        /*boolean success = (new File(mPath)).mkdirs();
         if (!success) {
             Log.e("Error", "Error creating directory");
-        }
+        }*/
     }
 
 
@@ -492,6 +505,24 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
             msg.obj = textTochange;
             mHandler.sendMessage(msg);
 
+            Intent intent = new Intent(this, InputPIN.class);
+
+            if (msg.obj.toString() == userName) {
+                if ((mLikely >= 0) && (mLikely < 50)) {
+                    intent.putExtra("name", userName);
+                    intent.putExtra("confidence", 1);
+                    startActivity(intent);
+                }
+                else if ((mLikely >= 50) && (mLikely < 80)){
+                    confidence = 2;
+                }
+            }
+
+            if (Math.abs(System.currentTimeMillis() - startTime) > 1000){
+                intent.putExtra("name", userName);
+                intent.putExtra("confidence", confidence);
+                startActivity(intent);
+            }
         }
 
         for (int i = 0; i < facesArray.length; i++)

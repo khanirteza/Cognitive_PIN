@@ -2,8 +2,10 @@ package com.halfwit.cognitivepin;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,6 +30,9 @@ public class InputPIN extends Activity {
     public float x1, x2;
     static final int MIN_DISTANCE = 250;
     public int fail, success;
+    private String userName;
+    private int confidence;
+    private SharedPreferences userInfo;
 
 
     @Override
@@ -36,11 +41,24 @@ public class InputPIN extends Activity {
         setContentView(R.layout.activity_input_pin);
         pinDot = (TextView) findViewById(R.id.pinDot);
         Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
+        /*Bundle extras = intent.getExtras();
         pin = extras.getString("EXTRA_PIN");
         selection = extras.getString("EXTRA_SELECTION");
         System.out.println(extras.getString("EXTRA_PIN"));
         System.out.println(extras.getString("EXTRA_SELECTION"));
+        */
+
+        userName = intent.getStringExtra("name");
+        confidence = intent.getIntExtra("confidence", 3);
+
+        userInfo = getSharedPreferences(getString(R.string.user_info_file), Context.MODE_PRIVATE);
+        pin = userInfo.getString(userName, null);
+        if (pin.contains("l"))
+            selection = "left";
+        else{
+            selection = "right";
+        }
+
         rand = new Random();
         randGenerator(pin, selection);
         fail = 0;

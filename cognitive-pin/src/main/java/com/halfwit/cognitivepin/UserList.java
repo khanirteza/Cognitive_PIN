@@ -1,5 +1,6 @@
 package com.halfwit.cognitivepin;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -7,6 +8,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import java.io.File;
@@ -40,21 +43,23 @@ public class UserList extends ActionBarActivity {
         gridView.setAdapter(gridAdapter);
 
 
-        /*gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 ImageItem item = (ImageItem) parent.getItemAtPosition(position);
 
-                *//*
+
                 //Create intent
-                Intent intent = new Intent(UserList.this, DetailsActivity.class);
-                intent.putExtra("title", item.getTitle());
-                intent.putExtra("image", item.getImage());
+                Intent intent = new Intent(UserList.this, FaceDetection.class);
+                intent.putExtra("name", item.getTitle());
+                //intent.putExtra("image", item.getImage());
 
                 //Start details activity
                 startActivity(intent);
-                *//*
+
+                //Toast.makeText(getApplicationContext(), item.getTitle(), Toast.LENGTH_SHORT);
+
             }
-        });*/
+        });
     }
 
     @Override
@@ -119,4 +124,7 @@ public class UserList extends ActionBarActivity {
 
         return imageItems;
     }
+
+
+
 }
