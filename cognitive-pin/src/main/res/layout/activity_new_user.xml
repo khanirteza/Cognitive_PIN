@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.halfwit.cognitivepin.FaceTraining">
+    tools:context="com.halfwit.cognitivepin.NewUser">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -78,7 +78,7 @@
                 android:gravity="center"
                 android:hint="@string/enter_pin"
                 android:inputType="numberPassword"
-                android:maxLength="4"
+                android:maxLength="8"
                 android:textAlignment="center" />
 
             <TextView

@@ -96,7 +96,7 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
     private int mChooseCamera = frontCam;
     private ImageView ivPerson;
     private boolean capturedFlag = false;
-    private int confidence = 3;
+    private int confidence = 0;
     private String userName;
     private long startTime;
 
@@ -187,7 +187,7 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
 
         userName = getIntent().getStringExtra("name");
         startTime = System.currentTimeMillis();
-        confidence = 3;
+        confidence = 0;
         //mPath = getFilesDir() + "/userList/";
         //mPath = extras.getString("PATH");
         mPath = getFilesDir() + getString(R.string.user_image_file);
@@ -203,6 +203,7 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
         mHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
+                Intent intent = new Intent(FaceDetection.this, InputPIN.class);
                 if (msg.obj == "IMG") {
                     Canvas canvas = new Canvas();
                     canvas.setBitmap(mBitmap);
@@ -210,7 +211,7 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
                     //capturedFlag = true;
                 }
                 else {
-                    textresult.setText(msg.obj.toString());
+                    textresult.setText(msg.obj.toString() + " " + mLikely);
                     String tempName = msg.obj.toString();
                     //ivGreen.setVisibility(View.INVISIBLE);
                     //ivYellow.setVisibility(View.INVISIBLE);
@@ -225,7 +226,28 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
                         ivRed.setVisibility(View.VISIBLE);*//*
                         */
 
+
+                    if (userName.equals(msg.obj.toString())) {
+                        if ((mLikely >= 0) && (mLikely < 50)) {
+                            /*intent.putExtra("name", userName);
+                            intent.putExtra("confidence", 0);
+                            startActivity(intent);
+                            */
+                            confidence += 2;
+                        }
+                        else if ((mLikely >= 50) && (mLikely < 80)){
+                            confidence += 1;
+                        }
+                    }
+
                 }
+                /*
+                if (Math.abs(System.currentTimeMillis() - startTime) > 5000){
+                    intent.putExtra("name", userName);
+                    intent.putExtra("confidence", confidence);
+                    startActivity(intent);
+                }
+                */
             }
         };
 
@@ -395,6 +417,8 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
     public void onResume() {
         super.onResume();
         OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_2_4_3, this, mLoaderCallback);
+        startTime = System.currentTimeMillis();
+        confidence = 0;
     }
 
     public void onDestroy() {
@@ -413,10 +437,10 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
     }
 
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+        Intent intent = new Intent(this, InputPIN.class);
 
         mRgba = inputFrame.rgba();
         mGray = inputFrame.gray();
-
 
         /*
         Mat mRgbaT = mRgba.t();
@@ -505,24 +529,25 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
             msg.obj = textTochange;
             mHandler.sendMessage(msg);
 
-            Intent intent = new Intent(this, InputPIN.class);
-
-            if (msg.obj.toString() == userName) {
-                if ((mLikely >= 0) && (mLikely < 50)) {
-                    intent.putExtra("name", userName);
-                    intent.putExtra("confidence", 1);
-                    startActivity(intent);
-                }
-                else if ((mLikely >= 50) && (mLikely < 80)){
-                    confidence = 2;
+            /*
+            if (!msg.obj.toString().isEmpty()) {
+                if (msg.obj.toString() == userName) {
+                    if ((mLikely >= 0) && (mLikely < 50)) {
+                        intent.putExtra("name", userName);
+                        intent.putExtra("confidence", 0);
+                        startActivity(intent);
+                    } else if ((mLikely >= 50) && (mLikely < 80)) {
+                        confidence = 1;
+                    }
                 }
             }
+            */
+        }
 
-            if (Math.abs(System.currentTimeMillis() - startTime) > 1000){
-                intent.putExtra("name", userName);
-                intent.putExtra("confidence", confidence);
-                startActivity(intent);
-            }
+        if (Math.abs(System.currentTimeMillis() - startTime) > 5000){
+            intent.putExtra("name", userName);
+            intent.putExtra("confidence", confidence);
+            startActivity(intent);
         }
 
         for (int i = 0; i < facesArray.length; i++)

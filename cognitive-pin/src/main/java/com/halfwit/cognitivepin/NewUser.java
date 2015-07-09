@@ -45,7 +45,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 
-public class FaceTraining extends Activity implements CvCameraViewListener2 {
+public class NewUser extends Activity implements CvCameraViewListener2 {
     public static final int JAVA_DETECTOR = 0;
     public static final int NATIVE_DETECTOR = 1;
     public static final int TRAINING = 0;
@@ -164,7 +164,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
         }
     };
 
-    public FaceTraining() {
+    public NewUser() {
         mDetectorName = new String[2];
         mDetectorName[JAVA_DETECTOR] = "Java";
         mDetectorName[NATIVE_DETECTOR] = "Native (tracking)";
@@ -181,7 +181,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        setContentView(R.layout.activity_face_training);
+        setContentView(R.layout.activity_new_user);
 
         mOpenCvCameraView = (RecognitionView) findViewById(R.id.face_training_java_surface_view);
         mOpenCvCameraView.setCvCameraViewListener(this);
@@ -587,6 +587,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
 
                 editor.commit();
                 //intent.putExtras(bundle);
+                fr.train();
 
                 startActivity(new Intent(this, HomeScreen.class));
             }

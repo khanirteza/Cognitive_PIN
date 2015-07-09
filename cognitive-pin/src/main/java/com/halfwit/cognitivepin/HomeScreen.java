@@ -43,7 +43,7 @@ public class HomeScreen extends ActionBarActivity {
 
     // Start the FaceTraining class
     public void newUser(View view){
-        Intent intent = new Intent(this, FaceTraining.class);
+        Intent intent = new Intent(this, NewUser.class);
         intent.putExtras(bundle);
         startActivity(intent);
     }
