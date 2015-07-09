@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
-    <file url="file://$PROJECT_DIR$/cognitive-pin/src/main/java/com/halfwit/cognitivepin/DetailsActivity.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/cognitive-pin/src/main/java/com/halfwit/cognitivepin/GridViewAdapter.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/cognitive-pin/src/main/java/com/halfwit/cognitivepin/ImageItem.java" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/cognitive-pin/src/main/res/layout/details_activity.xml" charset="windows-1252" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

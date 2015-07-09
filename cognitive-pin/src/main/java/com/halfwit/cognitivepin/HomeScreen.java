@@ -16,7 +16,7 @@ public class HomeScreen extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
-        bundle.putString("PATH", getFilesDir() + "/userList/");
+        bundle.putString("PATH", getFilesDir() + getString(R.string.user_image_file));
     }
 
     @Override

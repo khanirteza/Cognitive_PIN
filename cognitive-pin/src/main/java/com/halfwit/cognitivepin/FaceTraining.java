@@ -3,6 +3,7 @@ package com.halfwit.cognitivepin;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Bundle;
@@ -100,6 +101,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
     private int mChooseCamera = frontCam;
     private ImageView ivPerson;
     private boolean capturedFlag = false;
+    private SharedPreferences userInfo;
 
     //static { if (!OpenCVLoader.initDebug()) {  }}
 
@@ -182,17 +184,13 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
         setContentView(R.layout.activity_face_training);
 
         mOpenCvCameraView = (RecognitionView) findViewById(R.id.face_training_java_surface_view);
-
         mOpenCvCameraView.setCvCameraViewListener(this);
-        //mOpenCvCameraView.setCamFront();
-        //mOpenCvCameraView.setCamBack();
 
-
+        userInfo = getSharedPreferences(getString(R.string.user_info_file), Context.MODE_PRIVATE);
+        capturedFlag = false;
         //mPath = getFilesDir() + "/userList/";
         mPath = extras.getString("PATH");
-
         labelsFile = new labels(mPath);
-
         ivPerson = (ImageView) findViewById(R.id.face_training_iv_person);
 
 
@@ -374,19 +372,6 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
         }
     }
 
-    void grabarOnclick() {
-        if (toggleButtonGrabar.isChecked())
-            faceState = TRAINING;
-        else {
-            if (faceState == TRAINING) ;
-            // train();
-            //fr.train();
-            countImages = 0;
-            faceState = IDLE;
-        }
-
-
-    }
 
     @Override
     public void onPause() {
@@ -579,24 +564,32 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
         startActivity(intent);
     }
 
-    public void savePIN(View view){
-        Intent intent = new Intent(this, HomeScreen.class);
-        EditText pinText = (EditText) findViewById(R.id.face_training_et_pin);
+    // this function will save the user information
+    public void saveUser(View view){
+        //Intent intent = new Intent(this, HomeScreen.class);
+        EditText pinCode = (EditText) findViewById(R.id.face_training_et_pin);
         EditText userName = (EditText) findViewById(R.id.face_training_et_name);
-        Bundle bundle = new Bundle();
+        //Bundle bundle = new Bundle();
         RadioButton radioLeft = (RadioButton) findViewById(R.id.face_training_rd_left);
         RadioButton radioRight = (RadioButton) findViewById(R.id.face_training_rd_right);
-        if ((userName.length() > 0) && (pinText.length() >= PIN_LEN) && (radioLeft.isChecked() || radioRight.isChecked())) {
-            bundle.putString("EXTRA_PIN", pinText.getText().toString());
+        if ((userName.length() > 0) && (pinCode.length() >= PIN_LEN) && (radioLeft.isChecked() || radioRight.isChecked()) && capturedFlag) {
+            SharedPreferences.Editor editor = userInfo.edit();
+            String existingUser = userInfo.getString(userName.getText().toString(), null);
+            if (existingUser != null){
+                Toast.makeText(getApplicationContext(), "User already exists!", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                //bundle.putString("EXTRA_PIN", pinCode.getText().toString());
+                if (radioLeft.isChecked())
+                    editor.putString(userName.getText().toString(), pinCode.getText().toString() + "l");
+                else
+                    editor.putString(userName.getText().toString(), pinCode.getText().toString() + "r");
 
-            if (radioLeft.isChecked())
-                bundle.putString("EXTRA_SELECTION", "left");
-            else
-                bundle.putString("EXTRA_SELECTION", "right");
+                editor.commit();
+                //intent.putExtras(bundle);
 
-            intent.putExtras(bundle);
-
-            startActivity(intent);
+                startActivity(new Intent(this, HomeScreen.class));
+            }
         }
         else if (userName.length() == 0){
             Toast.makeText(getApplicationContext(), "Please, enter the user name!", Toast.LENGTH_SHORT).show();
@@ -604,7 +597,7 @@ public class FaceTraining extends Activity implements CvCameraViewListener2 {
         else if (!capturedFlag){
             Toast.makeText(getApplicationContext(), "Please, capture your photo!", Toast.LENGTH_SHORT).show();
         }
-        else if (pinText.length() < PIN_LEN) {
+        else if (pinCode.length() < PIN_LEN) {
             Toast.makeText(getApplicationContext(), "PIN has to be minimum 3 digits!", Toast.LENGTH_SHORT).show();
         }
         else if (!radioLeft.isChecked() || !radioRight.isChecked()) {
