@@ -52,6 +52,7 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
     private static final int frontCam = 1;
     private static final int backCam = 2;
     private static final int PIN_LEN = 3;
+    private static final int DETECTION_TIME = 4000;
     //    private int countTrain=0;
     String mPath = "";
     EditText etName;
@@ -544,7 +545,7 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
             */
         }
 
-        if (Math.abs(System.currentTimeMillis() - startTime) > 5000){
+        if (Math.abs(System.currentTimeMillis() - startTime) > DETECTION_TIME){
             intent.putExtra("name", userName);
             intent.putExtra("confidence", confidence);
             startActivity(intent);
