@@ -1,10 +1,8 @@
 package com.halfwit.cognitivepin;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 
 
@@ -19,12 +17,14 @@ public class HomeScreen extends ActionBarActivity {
         bundle.putString("PATH", getFilesDir() + getString(R.string.user_image_file));
     }
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_home_screen, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -40,6 +40,7 @@ public class HomeScreen extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    */
 
     // Start the FaceTraining class
     public void newUser(View view){

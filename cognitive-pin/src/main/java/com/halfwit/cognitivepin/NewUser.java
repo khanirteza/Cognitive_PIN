@@ -11,7 +11,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -227,7 +226,6 @@ public class NewUser extends Activity implements CvCameraViewListener2 {
         //btnCapture.setVisibility(View.INVISIBLE);
         //btnSave.setVisibility(View.INVISIBLE);
         btnCapture.setEnabled(false);
-
 
 
         //buttonCatalog = (Button) findViewById(R.id.buttonCat);
@@ -503,69 +501,14 @@ public class NewUser extends Activity implements CvCameraViewListener2 {
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        /*Log.i(TAG, "called onCreateOptionsMenu");
-        if (mOpenCvCameraView.numberCameras() > 1) {
-            nBackCam = menu.add(getResources().getString(R.string.SFrontCamera));
-            mFrontCam = menu.add(getResources().getString(R.string.SBackCamera));
-//        mEigen = menu.add("EigenFaces");
-//        mLBPH.setChecked(true);
-        } else {
-            imCamera.setVisibility(View.INVISIBLE);
-
-        }
-        //mOpenCvCameraView.setAutofocus();*/
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        /*// Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        Log.i(TAG, "called onOptionsItemSelected; selected item: " + item);
-//        if (item == mItemFace50)
-//            setMinFaceSize(0.5f);
-//        else if (item == mItemFace40)
-//            setMinFaceSize(0.4f);
-//        else if (item == mItemFace30)
-//            setMinFaceSize(0.3f);
-//        else if (item == mItemFace20)
-//            setMinFaceSize(0.2f);
-//        else if (item == mItemType) {
-//            mDetectorType = (mDetectorType + 1) % mDetectorName.length;
-//            item.setTitle(mDetectorName[mDetectorType]);
-//            setDetectorType(mDetectorType);
-//
-//        }
-        nBackCam.setChecked(false);
-        mFrontCam.setChecked(false);
-        //  mEigen.setChecked(false);
-        if (item == nBackCam) {
-            mOpenCvCameraView.setCamFront();
-            mChooseCamera = frontCam;
-        }
-        //fr.changeRecognizer(0);
-        else if (item == mFrontCam) {
-            mChooseCamera = backCam;
-            mOpenCvCameraView.setCamBack();
-
-        }
-
-        item.setChecked(true);*/
-        return true;
-    }
-
-
-    public void loadSetPIN(View view){
+    public void loadSetPIN(View view) {
         fr.train();
         Intent intent = new Intent(this, SetPIN.class);
         startActivity(intent);
     }
 
     // this function will save the user information
-    public void saveUser(View view){
+    public void saveUser(View view) {
         //Intent intent = new Intent(this, HomeScreen.class);
         EditText pinCode = (EditText) findViewById(R.id.face_training_et_pin);
         EditText userName = (EditText) findViewById(R.id.face_training_et_name);
@@ -575,10 +518,9 @@ public class NewUser extends Activity implements CvCameraViewListener2 {
         if ((userName.length() > 0) && (pinCode.length() >= PIN_LEN) && (radioLeft.isChecked() || radioRight.isChecked()) && capturedFlag) {
             SharedPreferences.Editor editor = userInfo.edit();
             String existingUser = userInfo.getString(userName.getText().toString(), null);
-            if (existingUser != null){
+            if (existingUser != null) {
                 Toast.makeText(getApplicationContext(), "User already exists!", Toast.LENGTH_SHORT).show();
-            }
-            else {
+            } else {
                 //bundle.putString("EXTRA_PIN", pinCode.getText().toString());
                 if (radioLeft.isChecked())
                     editor.putString(userName.getText().toString(), pinCode.getText().toString() + "l");
@@ -591,17 +533,13 @@ public class NewUser extends Activity implements CvCameraViewListener2 {
 
                 startActivity(new Intent(this, HomeScreen.class));
             }
-        }
-        else if (userName.length() == 0){
+        } else if (userName.length() == 0) {
             Toast.makeText(getApplicationContext(), "Please, enter the user name!", Toast.LENGTH_SHORT).show();
-        }
-        else if (!capturedFlag){
+        } else if (!capturedFlag) {
             Toast.makeText(getApplicationContext(), "Please, capture your photo!", Toast.LENGTH_SHORT).show();
-        }
-        else if (pinCode.length() < PIN_LEN) {
+        } else if (pinCode.length() < PIN_LEN) {
             Toast.makeText(getApplicationContext(), "PIN has to be minimum 3 digits!", Toast.LENGTH_SHORT).show();
-        }
-        else if (!radioLeft.isChecked() || !radioRight.isChecked()) {
+        } else if (!radioLeft.isChecked() || !radioRight.isChecked()) {
             Toast.makeText(getApplicationContext(), "Select Left or Right!", Toast.LENGTH_SHORT).show();
         }
 
