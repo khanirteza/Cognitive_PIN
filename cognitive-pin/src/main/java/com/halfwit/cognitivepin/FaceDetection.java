@@ -557,6 +557,7 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
         return mRgba;
     }
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -578,4 +579,5 @@ public class FaceDetection extends Activity implements CameraBridgeViewBase.CvCa
 
         return super.onOptionsItemSelected(item);
     }
+    */
 }
