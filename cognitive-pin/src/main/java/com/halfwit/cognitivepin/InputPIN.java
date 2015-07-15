@@ -2,9 +2,12 @@ package com.halfwit.cognitivepin;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -18,8 +21,8 @@ import java.util.Random;
 public class InputPIN extends Activity {
 
     private Random rand;
-    private int[] expectedInput = new int[4];
-    private int[] userInput = new int[4];
+    private int[] expectedInput;
+    private int[] userInput;
     String pin;
     String selection;
     int pass = 0;
@@ -28,6 +31,11 @@ public class InputPIN extends Activity {
     public float x1, x2;
     static final int MIN_DISTANCE = 250;
     public int fail, success;
+    private String userName;
+    private int confidence;
+    private SharedPreferences userInfo;
+    private int pinLen;
+    private int randDigitNumber;
 
 
     @Override
@@ -36,11 +44,38 @@ public class InputPIN extends Activity {
         setContentView(R.layout.activity_input_pin);
         pinDot = (TextView) findViewById(R.id.pinDot);
         Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
+        /*Bundle extras = intent.getExtras();
         pin = extras.getString("EXTRA_PIN");
         selection = extras.getString("EXTRA_SELECTION");
         System.out.println(extras.getString("EXTRA_PIN"));
         System.out.println(extras.getString("EXTRA_SELECTION"));
+        */
+
+        userName = intent.getStringExtra("name");
+        confidence = intent.getIntExtra("confidence", 0);
+        randDigitNumber = 5;
+
+        /*
+        if (confidence > 35)
+            randDigitNumber = 3;
+        else if ((confidence > 15) && (confidence <= 35))
+            randDigitNumber = 4;
+        else
+            randDigitNumber = 5;
+            */
+
+        userInfo = getSharedPreferences(getString(R.string.user_info_file), Context.MODE_PRIVATE);
+        pin = userInfo.getString(userName, null);
+        pinLen = pin.length() - 1;
+        expectedInput = new int[pinLen];
+        userInput = new int[pinLen];
+
+        if (pin.contains("l"))
+            selection = "left";
+        else{
+            selection = "right";
+        }
+
         rand = new Random();
         randGenerator(pin, selection);
         fail = 0;
@@ -65,6 +100,17 @@ public class InputPIN extends Activity {
         }
 
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    public void onBackPressed(){
+        InputPIN.this.finish();
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        randDigitNumber = 5;
     }
 
     @Override
@@ -96,7 +142,7 @@ public class InputPIN extends Activity {
         pinDot.append("•");
         pass++;
         //show();
-        if (pass < 4)
+        if (pass < pinLen)
             randGenerator(pin, selection);
         else {
             endTime = System.currentTimeMillis();
@@ -112,7 +158,7 @@ public class InputPIN extends Activity {
         pinDot.append("•");
         pass++;
         //show();
-        if (pass < 4)
+        if (pass < pinLen)
             randGenerator(pin, selection);
         else {
             endTime = System.currentTimeMillis();
@@ -149,15 +195,44 @@ public class InputPIN extends Activity {
         //show();
         pass = 0;
         pinDot.setText("");
-        expectedInput = new int[4];
-        userInput = new int[4];
+        expectedInput = new int[pinLen];
+        userInput = new int[pinLen];
         randGenerator(pin, selection);
     }
 
     public void randGenerator(String pin, String selection) {
         //Generate random number for each pass
 
-        int num1, num2, num3, num4, num5;
+        if (confidence > 35)
+            randDigitNumber = 3;
+        else if ((confidence > 15) && (confidence <= 35))
+            randDigitNumber = 3 + rand.nextInt(2);
+        else if (confidence <= 15)
+            randDigitNumber = 5;
+        //Log.e("jontrona", String.valueOf(randDigitNumber));
+
+
+        int[] num = new int[randDigitNumber];
+        char[] chDigit = new char[randDigitNumber];
+
+        num[0] = rand.nextInt(10);
+        chDigit[0] = String.valueOf(num[0]).charAt(0);
+        for (int i = 1; i < randDigitNumber; i++){
+            num[i] = rand.nextInt(10);
+            for (int j = 0; j<i; ){
+                if (num[i] == num[j]) {
+                    num[i] = rand.nextInt(10);
+                    j = 0;
+                    continue;
+                }
+                j++;
+            }
+            chDigit[i] = String.valueOf(num[i]).charAt(0);
+        }
+
+        setNumberPadColor(num);
+
+        /*int num1, num2, num3, num4, num5;
         char chDigit1, chDigit2, chDigit3, chDigit4, chDigit5;
         num1 = rand.nextInt(10);
         num2 = rand.nextInt(10);
@@ -179,7 +254,7 @@ public class InputPIN extends Activity {
         chDigit4 = String.valueOf(num4).charAt(0);
         chDigit5 = String.valueOf(num5).charAt(0);
 
-        setNumberPadColor(num1, num2, num3, num4, num5);
+        setNumberPadColor(num1, num2, num3, num4, num5);*/
 
         /*TextView digit1 = (TextView) findViewById(R.id.digit1);
         TextView digit2 = (TextView) findViewById(R.id.digit2);
@@ -188,7 +263,7 @@ public class InputPIN extends Activity {
         digit1.setText(String.valueOf(num1));
         digit2.setText(String.valueOf(num2));
         digit3.setText(String.valueOf(num3));
-        digit4.setText(String.valueOf(num4));*/
+        digit4.setText(String.valueOf(num4));
 
         if (selection.equals("left")) {
 
@@ -206,10 +281,26 @@ public class InputPIN extends Activity {
             else
                 expectedInput[pass] = -1;
         }
+        */
+
+        if (selection.equals("left")){
+            expectedInput[pass] = 1;
+            for (int i = 0; i < num.length; i++){
+                if (pin.charAt(pass) == chDigit[i])
+                    expectedInput[pass] = -1;;
+            }
+        }
+        else{
+            expectedInput[pass] = -1;
+            for (int i = 0; i < num.length; i++){
+                if (pin.charAt(pass) == chDigit[i])
+                    expectedInput[pass] = 1;
+            }
+        }
 
     }
 
-    public void setNumberPadColor(int num1, int num2, int num3, int num4, int num5) {
+    /*public void setNumberPadColor(int num1, int num2, int num3, int num4, int num5) {
         //Set the number pad color based on passed argument
         TextView[] textDigit = new TextView[10];
 
@@ -234,6 +325,31 @@ public class InputPIN extends Activity {
         textDigit[num4].setTextColor(getResources().getColor(android.R.color.black));
         textDigit[num5].setTextColor(getResources().getColor(android.R.color.black));
 
+    }*/
+    public void setNumberPadColor(int num[]){
+        // set the number pad color based on passed array
+        TextView[] textDigit = new TextView[10];
+
+        textDigit[0] = (TextView) findViewById(R.id.textDigit0);
+        textDigit[1] = (TextView) findViewById(R.id.textDigit1);
+        textDigit[2] = (TextView) findViewById(R.id.textDigit2);
+        textDigit[3] = (TextView) findViewById(R.id.textDigit3);
+        textDigit[4] = (TextView) findViewById(R.id.textDigit4);
+        textDigit[5] = (TextView) findViewById(R.id.textDigit5);
+        textDigit[6] = (TextView) findViewById(R.id.textDigit6);
+        textDigit[7] = (TextView) findViewById(R.id.textDigit7);
+        textDigit[8] = (TextView) findViewById(R.id.textDigit8);
+        textDigit[9] = (TextView) findViewById(R.id.textDigit9);
+
+        for (TextView textView : textDigit) {
+            textView.setTextColor(getResources().getColor(android.R.color.darker_gray));
+        }
+
+        //Log.e("jontrona", String.valueOf(num.length));
+        for (int i = 0; i < num.length; i++){
+            Log.e("jontrona", String.valueOf(num[i]));
+            textDigit[num[i]].setTextColor(getResources().getColor(android.R.color.black));
+        }
     }
 
     //for debugging purpose only
