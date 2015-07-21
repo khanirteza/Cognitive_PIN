@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -34,8 +32,10 @@ public class InputPIN extends Activity {
     private String userName;
     private int confidence;
     private SharedPreferences userInfo;
+    private SharedPreferences userStat;
     private int pinLen;
     private int randDigitNumber;
+    private SharedPreferences.Editor editor;
 
 
     @Override
@@ -65,6 +65,8 @@ public class InputPIN extends Activity {
             */
 
         userInfo = getSharedPreferences(getString(R.string.user_info_file), Context.MODE_PRIVATE);
+        userStat = getSharedPreferences(getString(R.string.user_stat_file), Context.MODE_PRIVATE);
+        editor = userStat.edit();
         pin = userInfo.getString(userName, null);
         pinLen = pin.length() - 1;
         expectedInput = new int[pinLen];
@@ -113,6 +115,7 @@ public class InputPIN extends Activity {
         randDigitNumber = 5;
     }
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -134,6 +137,7 @@ public class InputPIN extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+*/
 
     public void leftSelection(final View view) {
         if (pass == 0)
@@ -168,9 +172,20 @@ public class InputPIN extends Activity {
     }
 
     public void showResult(final View view) {
+
+        double timeDiff = (double)(endTime - startTime) / 1000;
         if (Arrays.equals(expectedInput, userInput)) {
+            String prevVal = userStat.getString(userName + "-success", null);
+            if (prevVal == null)
+                prevVal = String.valueOf(timeDiff);
+            else
+                prevVal += ", " + String.valueOf(timeDiff);
+
+            editor.putString(userName + "-success", prevVal);
+            editor.commit();
+
             new AlertDialog.Builder(this).setTitle("Success")
-                    .setMessage("Correct PIN\nTime taken: " + (double) (endTime - startTime) / 1000 + "s" +
+                    .setMessage("Correct PIN\nTime taken: " + timeDiff + "s" +
                             "\nSucceeded: " + ++success + "\nFailed: " + fail)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
@@ -179,8 +194,17 @@ public class InputPIN extends Activity {
                     })
                     .show();
         } else {
+            String prevVal = userStat.getString(userName + "-fail", null);
+            if (prevVal == null)
+                prevVal = String.valueOf(timeDiff);
+            else
+                prevVal += ", " + String.valueOf(timeDiff);
+
+            editor.putString(userName + "-fail", prevVal);
+            editor.commit();
+
             new AlertDialog.Builder(this).setTitle("Fail")
-                    .setMessage("Wrong PIN\nTime taken: " + (double) (endTime - startTime) / 1000 + "s" +
+                    .setMessage("Wrong PIN\nTime taken: " + timeDiff + "s" +
                             "\nSucceeded: " + success + "\nFailed: " + ++fail)
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {

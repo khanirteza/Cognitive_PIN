@@ -14,6 +14,7 @@
     <string name="Straining">Training...</string>
     <string name="user_info_file">com.halfwit.cognitivepin-user-info</string>
     <string name="user_image_file">/com.halfwit.cognitivepin-user-image/</string>
+    <string name="user_stat_file">com.halfwit.cognitivepin-user-stat</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
